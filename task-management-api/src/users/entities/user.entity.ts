@@ -12,8 +12,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
 } from 'typeorm';
-//import { Task } from '../../tasks/entities/task.entity';
-//import { Task } from '../tasks/task.entity'; // Adjusted import path
 import { Task } from '../../tasks/task.entity';
 
 export enum UserRole {
