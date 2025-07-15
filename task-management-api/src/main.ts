@@ -14,8 +14,11 @@ async function bootstrap() {
   app.enableCors({
    
      origin: [
-   'http://localhost:3001',
-  'https://my-auth-colwuype1-pankaj-chavans-projects-fc13a409.vercel.app'
+  //  'http://localhost:3001',
+  // 'https://my-auth-colwuype1-pankaj-chavans-projects-fc13a409.vercel.app'
+
+     'http://localhost:3001',
+      'https://my-auth-app-six.vercel.app',
 ],
 
     credentials: true,              
