@@ -20,8 +20,7 @@ async function bootstrap() {
      'http://localhost:3001',
       'https://my-auth-app-six.vercel.app',
 ],
-
-    credentials: true,              
+    credentials: true,                
   });   
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
