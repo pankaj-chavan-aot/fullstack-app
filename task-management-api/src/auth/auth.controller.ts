@@ -62,6 +62,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('profile')
   getProfile(@Request() req) {
+     console.log('🍪 Cookie: ', req.cookies); // ✅ हे check कर
+  console.log('👤 User: ', req.user); // ✅ हे check कर
     return req.user;
   } 
 }
