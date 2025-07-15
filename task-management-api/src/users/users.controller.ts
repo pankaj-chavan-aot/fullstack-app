@@ -8,7 +8,7 @@ import { JwtAuthGuard } from '../auth/jwt.strategy';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  // फक्त user स्वतःचं data बघू शकतो
+  
   @Get('me')
   async getProfile(@Req() req) {
     return this.usersService.findById(req.user.id);
