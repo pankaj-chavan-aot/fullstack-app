@@ -4,7 +4,7 @@ console.log("✅ BASE URL =", process.env.REACT_APP_API_URL);
 console.log("✅ API Base URL:", process.env.REACT_APP_API_URL)
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  withCredentials: true,  // 🍪 Cookie साठी गरजेचं आहे
+  withCredentials: true,  
 });
 
 // Signup API
@@ -17,7 +17,9 @@ export const login = (username, password) =>
 
 // Profile fetch API (POST /auth/profile)
 export const getProfile = () =>
-  API.post('/auth/profile');
+ // API.post('/auth/profile');
+API.post('/auth/profile', {}, );
+  
 
 
 // Get tasks for current logged-in user
