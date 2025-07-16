@@ -11,17 +11,18 @@ async function bootstrap() {
     app.use(cookieParser());
 
   app.enableCors({
+    
    
      origin: [
   //  'http://localhost:3001',
   // 'https://my-auth-colwuype1-pankaj-chavans-projects-fc13a409.vercel.app'
 
-     'http://localhost:3001',
-      'https://my-auth-app-six.vercel.app',
+    // 'http://localhost:3001',
+    'https://my-auth-app-six.vercel.app',
+    'https://my-auth-qkl173jkw-pankaj-chavans-projects-fc13a409.vercel.app', // 👈 हे नवं add करा
 ],
     credentials: true,                
   });   
-
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
  //app.useGlobalGuards(app.get(JwtAuthGuard), app.get(RolesGuard));
   await app.listen(3000);
