@@ -1,13 +1,7 @@
-import axios from 'axios';
+// src/api/auth.js
+import API from './api'; // इथे import करा, पुन्हा define करू नकोस
 
-console.log("\u2705 BASE URL =", process.env.REACT_APP_API_URL);
-
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  withCredentials: true,  // कुक्टी cookie-auth साठी जाओन्यासाठी पाठवाण्यासाठी
-});
-
-// Signup API
+// Signup
 export const signup = async (username, password) => {
   try {
     const res = await API.post('/auth/signup', { username, password });
@@ -18,7 +12,7 @@ export const signup = async (username, password) => {
   }
 };
 
-// Login API
+// Login
 export const login = async (username, password) => {
   try {
     const res = await API.post('/auth/login', { username, password });
@@ -29,10 +23,10 @@ export const login = async (username, password) => {
   }
 };
 
-// Profile fetch API (POST /auth/profile)
+// Profile (cookie वापरून protected route)
 export const getProfile = async () => {
   try {
-    const res = await API.post('/auth/profile', {}); // जाकी POST हे म्हणे body खाली नाही जाओ मगे headers ञाणीकी cookie जाओन्यासाठी
+    const res = await API.post('/auth/profile');
     return res.data;
   } catch (err) {
     console.error("❌ Profile fetch error:", err?.response?.status, err?.response?.data);
@@ -40,7 +34,7 @@ export const getProfile = async () => {
   }
 };
 
-// Get tasks for current logged-in user
+// Tasks
 export const getTasks = async () => {
   try {
     const res = await API.get('/tasks/me');
