@@ -41,9 +41,9 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://my-auth-app-six.vercel.app',
-      'https://my-auth-qkl173jkw-pankaj-chavans-projects-fc13a409.vercel.app',
+      //'https://my-auth-qkl173jkw-pankaj-chavans-projects-fc13a409.vercel.app',
     ],
-    credentials: true,
+      credentials: true,
   });
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));

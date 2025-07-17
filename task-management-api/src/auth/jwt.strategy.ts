@@ -16,7 +16,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         (req: Request) => {
     console.log('🧪 Incoming cookies:', req.cookies); // cookie मिळतेय का?
 
-          return req?.cookies?.jwt || null;
+          //return req?.cookies?.jwt || null;
+          return req?.cookies?.access_token || null;
+
         },
       ]),
       secretOrKey: 'jwt-secret-key', 
