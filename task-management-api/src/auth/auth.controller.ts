@@ -29,11 +29,15 @@
 //   }
 // }
       
-import { Controller, Request, Post, UseGuards, Body, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Request, Post, UseGuards, Body, Res, Req } from '@nestjs/common';
+import { Response, Request as ExpressRequest } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt.strategy';
 import { LocalAuthGuard } from './local-auth.guard';
+
+interface AuthenticatedRequest extends ExpressRequest {
+  user?: any;
+}
 
 @Controller('auth')
 export class AuthController {
@@ -43,13 +47,13 @@ export class AuthController {
   @Post('login')
   async login(@Request() req, @Res({ passthrough: true }) res: Response) {
     const { access_token } = await this.authService.login(req.user);
-    
-    // Cookie सेट करणे:
+
     res.cookie('jwt', access_token, {
       httpOnly: true,
-       sameSite: 'none',   // ✅ Cross-site cookie साठी 'none' लागतो
-      secure: true
-  });
+      sameSite: 'none',
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     return { message: 'Login successful' };
   }
@@ -61,9 +65,12 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('profile')
-  getProfile(@Request() req) {
-     console.log('🍪 Cookie: ', req.cookies); // ✅ हे check कर
-  console.log('👤 User: ', req.user); // ✅ हे check कर
+  getProfile(@Req() req: AuthenticatedRequest) {
+    console.log('🍪 Cookie: ', req.cookies);
+    console.log('👤 User: ', req.user);
     return req.user;
-  } 
+  }
 }
+
+ 
+
