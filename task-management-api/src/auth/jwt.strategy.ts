@@ -16,8 +16,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         (req: Request) => {
     console.log('🧪 Incoming cookies:', req.cookies); // cookie मिळतेय का?
 
-          //return req?.cookies?.jwt || null;
-          return req?.cookies?.access_token || null;
+          return req?.cookies?.jwt || null;
+          //return req?.cookies?.access_token || null;
 
         },
       ]),
@@ -26,6 +26,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+      console.log('🔐 JWT payload:', payload); // add this line
+
     return { id: payload.sub, username: payload.username, role: payload.role };
   }
 }
