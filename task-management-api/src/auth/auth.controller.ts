@@ -1,20 +1,34 @@
-// // src/auth/auth.controller.ts
-// import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+
+      
+// import { Controller, Request, Post, UseGuards, Body, Res, Req } from '@nestjs/common';
+// import { Response, Request as ExpressRequest } from 'express';
 // import { AuthService } from './auth.service';
-// //import { LocalAuthGuard } from './local.strategy';
 // import { JwtAuthGuard } from './jwt.strategy';
+// //import { JwtAuthGuard } from './jwt-auth.guard';
+
 // import { LocalAuthGuard } from './local-auth.guard';
 
-
+// interface AuthenticatedRequest extends ExpressRequest {
+//   user?: any;
+// }
 
 // @Controller('auth')
 // export class AuthController {
 //   constructor(private authService: AuthService) {}
 
 //   @UseGuards(LocalAuthGuard)
-//   @Post('login')  
-//   async login(@Request() req) {
-//     return this.authService.login(req.user);
+//   @Post('login')
+//   async login(@Request() req, @Res({ passthrough: true }) res: Response) {
+//     const { access_token } = await this.authService.login(req.user);
+
+//     res.cookie('jwt', access_token, {
+//       httpOnly: true,
+//       sameSite: 'none',
+//       secure: true,
+//       maxAge: 24 * 60 * 60 * 1000,
+//     });
+
+//     return { message: 'Login successful' };
 //   }
 
 //   @Post('signup')
@@ -22,13 +36,22 @@
 //     return this.authService.signup(body.username, body.password);
 //   }
 
-//   @UseGuards(JwtAuthGuard)
-//   @Post('profile')
-//   getProfile(@Request() req) {
-//     return req.user;
-//   }
+//   // @UseGuards(JwtAuthGuard)
+//   // @Post('profile')
+//   // getProfile(@Req() req: AuthenticatedRequest) {
+//   //   console.log('🍪 Cookie: ', req.cookies);
+//   //   console.log('👤 User: ', req.user);
+//   //   return req.user;
+//    @UseGuards(JwtAuthGuard)
+// @Post('profile')
+// getProfile(@Req() req) {
+//   return req.user; // JWT validate झाला की user info मिळते
 // }
-      
+
+//   }
+
+
+ 
 import { Controller, Request, Post, UseGuards, Body, Res, Req } from '@nestjs/common';
 import { Response, Request as ExpressRequest } from 'express';
 import { AuthService } from './auth.service';
@@ -66,11 +89,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('profile')
   getProfile(@Req() req: AuthenticatedRequest) {
-    console.log('🍪 Cookie: ', req.cookies);
-    console.log('👤 User: ', req.user);
     return req.user;
   }
 }
-
- 
-

@@ -38,14 +38,16 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  app.enableCors({
-    origin: [
-      'https://my-auth-app-six.vercel.app',
-      //'https://my-auth-qkl173jkw-pankaj-chavans-projects-fc13a409.vercel.app',
-    ],
-      credentials: true,
-  });
-
+  // app.enableCors({
+  //   origin: 'https://my-auth-app-six.vercel.app',
+  //     //'https://my-auth-qkl173jkw-pankaj-chavans-projects-fc13a409.vercel.app',
+    
+  //     credentials: true,
+  // });
+app.enableCors({
+  origin: 'https://my-auth-app-six.vercel.app',
+  credentials: true,
+});
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   // ✅ Render compatible port setup
