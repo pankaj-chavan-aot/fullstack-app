@@ -67,7 +67,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post('login')
+   @Post('login')
   async login(@Request() req, @Res({ passthrough: true }) res: Response) {
     const { access_token } = await this.authService.login(req.user);
 
