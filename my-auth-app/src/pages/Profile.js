@@ -7,7 +7,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await API.post('/auth/profile'); // ✅ cookie-auth protected API call
+      //  const res = await API.post('/auth/profile'); // ✅ cookie-auth protected API call
+      const res = await API.post('/auth/profile', {}, { withCredentials: true });
+
         setUser(res.data);
       } catch (err) {
         console.error('❌ Profile fetch failed:', err);
