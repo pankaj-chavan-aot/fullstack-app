@@ -12,6 +12,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+ JoinColumn,
 } from 'typeorm';
 //import { User } from '../../users/entities/user.entity';
 import { User } from '../users/entities/user.entity';
@@ -45,6 +46,13 @@ export class Task {
   @Column({ type: 'enum', enum: TaskPriority, default: TaskPriority.MEDIUM })
   priority: TaskPriority;
 
-  @ManyToOne(() => User, (user) => user.tasks)
+  // @ManyToOne(() => User, (user) => user.tasks)
+  // user: User;
+   @Column()
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.tasks, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 }
+

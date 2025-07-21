@@ -1,26 +1,30 @@
-// export class UpdateTaskDto {
-//   @IsOptional() @IsEnum(TaskStatus) status?: TaskStatus;
-//   @IsOptional() @IsEnum(TaskPriority) priority?: TaskPriority;
-//   @IsOptional() @IsNotEmpty() title?: string;
-//   @IsOptional() @IsNotEmpty() description?: string;
+
+// // src/tasks/dto/create-task.dto.ts
+// import { IsString, IsEnum, IsOptional, IsInt } from 'class-validator';
+// import { TaskPriority, TaskStatus } from '../task.entity';
+
+// export class CreateTaskDto {
+//   @IsString()
+//   title: string;
+
+//   @IsString()
+//   description: string;
+
+//   @IsEnum(TaskPriority)
+//   @IsOptional()
+//   priority?: TaskPriority;
+
+//   @IsEnum(TaskStatus)
+//   @IsOptional()
+//   status?: TaskStatus;
+
+//   @IsInt()
+//   @IsOptional()
+//   userId?: number; // ✅ admin assigns to another user
 // }
-import { IsOptional, IsEnum, IsNotEmpty } from 'class-validator';
-import { TaskPriority, TaskStatus } from '../task.entity';
 
-export class UpdateTaskDto {
-  @IsOptional()
-  @IsEnum(TaskStatus)
-  status?: TaskStatus;
 
-  @IsOptional()
-  @IsEnum(TaskPriority)
-  priority?: TaskPriority;
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateTaskDto } from './create-task.dto';
 
-  @IsOptional()
-  @IsNotEmpty()
-  title?: string;
-
-  @IsOptional()
-  @IsNotEmpty()
-  description?: string;
-}
+export class UpdateTaskDto extends PartialType(CreateTaskDto) {}
