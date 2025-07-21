@@ -1,7 +1,52 @@
-// src/api/auth.js
-import API from './api'; // इथे import करा, पुन्हा define करू नकोस
+// // src/api/auth.js
+// import API from './api'; // इथे import करा, पुन्हा define करू नकोस
 
-// Signup
+// // Signup
+// export const signup = async (username, password) => {
+//   try {
+//     const res = await API.post('/auth/signup', { username, password });
+//     return res.data;
+//   } catch (err) {
+//     console.error("❌ Signup error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
+
+// // Login
+// export const login = async (username, password) => {
+//   try {
+//     const res = await API.post('/auth/login', { username, password });
+//     return res.data;
+//   } catch (err) {
+//     console.error("❌ Login error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
+
+// // Profile (cookie वापरून protected route)
+// export const getProfile = async () => {
+//   try {
+//     const res = await API.post('/auth/profile');
+//     return res.data;
+//   } catch (err) {
+//     console.error("❌ Profile fetch error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
+
+// // Tasks
+// export const getTasks = async () => {
+//   try {
+//     const res = await API.get('/tasks/me');
+//     return res.data;
+//   } catch (err) {
+//     console.error("❌ Get tasks error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
+import API from './api';
+
+// ✅ Signup
 export const signup = async (username, password) => {
   try {
     const res = await API.post('/auth/signup', { username, password });
@@ -12,7 +57,7 @@ export const signup = async (username, password) => {
   }
 };
 
-// Login
+// ✅ Login
 export const login = async (username, password) => {
   try {
     const res = await API.post('/auth/login', { username, password });
@@ -23,7 +68,7 @@ export const login = async (username, password) => {
   }
 };
 
-// Profile (cookie वापरून protected route)
+// ✅ Get Profile
 export const getProfile = async () => {
   try {
     const res = await API.post('/auth/profile');
@@ -34,13 +79,49 @@ export const getProfile = async () => {
   }
 };
 
-// Tasks
+// ✅ Get Tasks (admin → all, user → own)
 export const getTasks = async () => {
   try {
-    const res = await API.get('/tasks/me');
+    const profile = await getProfile();
+    const res = profile.role === 'admin'
+      ? await API.get('/tasks') // admin → all tasks
+      : await API.get(`/tasks/user/${profile.id}`); // user → own tasks
     return res.data;
   } catch (err) {
     console.error("❌ Get tasks error:", err?.response?.status, err?.response?.data);
+    throw err;
+  }
+};
+
+// ✅ Create Task
+export const createTask = async (taskData) => {
+  try {
+    const res = await API.post('/tasks', taskData);
+    return res.data;
+  } catch (err) {
+    console.error("❌ Create task error:", err?.response?.status, err?.response?.data);
+    throw err;
+  }
+};
+
+// ✅ Update Task (user can update own, admin can update any)
+export const updateTask = async (taskId, updates) => {
+  try {
+    const res = await API.patch(`/tasks/${taskId}`, updates);
+    return res.data;
+  } catch (err) {
+    console.error("❌ Update task error:", err?.response?.status, err?.response?.data);
+    throw err;
+  }
+};
+
+// ✅ Assign Task (admin only)
+export const assignTask = async (taskId, userId) => {
+  try {
+    const res = await API.patch(`/tasks/${taskId}/assign`, { userId });
+    return res.data;
+  } catch (err) {
+    console.error("❌ Assign task error:", err?.response?.status, err?.response?.data);
     throw err;
   }
 };
