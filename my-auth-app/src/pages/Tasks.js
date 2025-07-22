@@ -114,42 +114,30 @@ export default function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [user, setUser] = useState(null);
 
-  const fetchUser = async () => {
+  const fetchUserAndTasks = async () => {
     try {
-      const data = await getProfile();
-      setUser(data);
-    } catch (err) {
-      console.error("❌ Failed to fetch user", err);
-    }
-  };
+      const profile = await getProfile();
+      setUser(profile);
 
-  const fetchAllTasks = async () => {
-    try {
-      const data = await getTasks();
+      const data = await getTasks(profile); // ✅ profile पास केला
       setTasks(data);
     } catch (err) {
-      console.error("❌ Failed to fetch tasks", err);
+      console.error("❌ Failed to fetch user or tasks", err);
     }
   };
 
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       await updateTask(taskId, { status: newStatus });
-      fetchAllTasks();
+      fetchUserAndTasks(); // ✅ Refresh after update
     } catch (err) {
       console.error("❌ Failed to update task", err);
     }
   };
 
   useEffect(() => {
-    fetchUser();
+    fetchUserAndTasks(); // ✅ Single call on mount
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      fetchAllTasks();
-    }
-  }, [user]);
 
   return (
     <div className="p-6">
@@ -207,7 +195,7 @@ export default function Tasks() {
                           if (userId) {
                             try {
                               await assignTask(task.id, userId);
-                              fetchAllTasks();
+                              fetchUserAndTasks(); // ✅ Refresh after assign
                             } catch (err) {
                               console.error("❌ Assign task failed", err);
                             }

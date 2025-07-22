@@ -80,9 +80,22 @@ export const getProfile = async () => {
 };
 
 // ✅ Get Tasks (admin → all, user → own)
-export const getTasks = async () => {
+// export const getTasks = async () => {
+//   try {
+//     const profile = await getProfile(); // ✅ Fix: define profile
+//     const res = profile.role === 'admin'
+//       ? await API.get('/tasks') // admin → all tasks
+//       : await API.get(`/tasks/user/${profile.id}`); // user → own tasks
+//     return res.data;
+//   } catch (err) {
+//     console.error("❌ Get tasks error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
+
+// ✅ Get Tasks (admin → all, user → own)
+export const getTasks = async (profile) => {
   try {
-    const profile = await getProfile();
     const res = profile.role === 'admin'
       ? await API.get('/tasks') // admin → all tasks
       : await API.get(`/tasks/user/${profile.id}`); // user → own tasks
