@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/co
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UserRole } from '../users/entities/user.entity'; // 👈 योग्य import
 
 @Injectable()
 export class AuthService {
@@ -26,15 +27,28 @@ export class AuthService {
     };
   }
 
-  async signup(username: string, password: string) {
-    const hashed = await bcrypt.hash(password, 10);
-    try {
-      return await this.usersService.create({ username, password: hashed });
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException('Username already exists');
-      }
-      throw error;
+  // async signup(username: string, password: string) {
+  //   const hashed = await bcrypt.hash(password, 10);
+  //   try { 
+  //     return await this.usersService.create({ username, password: hashed });
+  //   } catch (error) {
+  //     if (error.code === '23505') {
+  //       throw new ConflictException('Username already exists');
+  //     }
+  //     throw error;
+  //   }
+  // }
+
+  async signup(username: string, password: string, role: UserRole = UserRole.USER) {
+  const hashed = await bcrypt.hash(password, 10);
+  try {
+    return await this.usersService.create({ username, password: hashed, role });
+  } catch (error) {
+    if (error.code === '23505') {
+      throw new ConflictException('Username already exists');
     }
+    throw error;
   }
+}
+
 }

@@ -57,6 +57,8 @@ import { Response, Request as ExpressRequest } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt.strategy';
 import { LocalAuthGuard } from './local-auth.guard';
+import { UserRole } from '../users/entities/user.entity'; // 👈 योग्य import
+
 
 interface AuthenticatedRequest extends ExpressRequest {
   user?: any;
@@ -81,14 +83,19 @@ export class AuthController {
     return { message: 'Login successful' };
   }
 
-  @Post('signup')
-  async signup(@Body() body: { username: string; password: string }) {
-    return this.authService.signup(body.username, body.password);
-  }
+  // @Post('signup')
+  // async signup(@Body() body: { username: string; password: string }) {
+  //   return this.authSservice.signup(body.username, body.password);
+  // }
 
-  @UseGuards(JwtAuthGuard)
+  @Post('signup')
+    async signup(@Body() body: { username: string; password: string; role?: UserRole }) {
+       return this.authService.signup(body.username, body.password, body.role);
+}
+
+    @UseGuards(JwtAuthGuard)
   @Post('profile')
-  getProfile(@Req() req: AuthenticatedRequest) {
+    getProfile(@Req() req: AuthenticatedRequest) {
     return req.user;
   }
 }
