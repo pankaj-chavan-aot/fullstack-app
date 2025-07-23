@@ -2,9 +2,9 @@
 import API from './api';
 
 // ✅ Signup
-export const signup = async (username, password) => {
+export const signup = async (username, password, role) => {
   try {
-    const res = await API.post('/auth/signup', { username, password });
+    const res = await API.post('/auth/signup', { username, password, role });
     return res.data;
   } catch (err) {
     console.error("❌ Signup error:", err?.response?.status, err?.response?.data);
