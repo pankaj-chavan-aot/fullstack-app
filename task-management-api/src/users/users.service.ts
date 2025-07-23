@@ -16,9 +16,16 @@ export class UsersService {
 //   async findByUsername(username: string): Promise<User> {
 //     return this.usersRepo.findOne({ where: { username } });
 // 
- async findByUsername(username: string): Promise<User | null> {
-  return this.usersRepo.findOne({ where: { username } });
+//  async findByUsername(username: string): Promise<User | null> {
+//   return this.usersRepo.findOne({ where: { username } });
+// }
+async findByUsername(username: string): Promise<User | null> {
+  return this.usersRepo.findOne({
+    where: { username },
+    relations: ['role'],
+  });
 }
+
 
   async findById(id: number): Promise<User> {
     const user = await this.usersRepo.findOne({ where: { id } });
