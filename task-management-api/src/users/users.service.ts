@@ -22,7 +22,7 @@ export class UsersService {
 async findByUsername(username: string): Promise<User | null> {
   return this.usersRepo.findOne({
     where: { username },
-    relations: ['role'],
+    //relations: ['role'],
   });
 }
 
