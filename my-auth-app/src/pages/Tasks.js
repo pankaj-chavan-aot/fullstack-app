@@ -140,9 +140,9 @@ export default function Tasks() {
   const fetchUserAndTasks = async () => {
     try {
       const profile = await getProfile();
-      const taskList = await getTasks(profile);
+            console.log("✅ PROFILE:", profile);
 
-      console.log("✅ PROFILE:", profile);
+      const taskList = await getTasks(profile);
       console.log("✅ TASK LIST:", taskList);
 
       setUser(profile);
