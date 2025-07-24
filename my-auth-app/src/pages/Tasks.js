@@ -1,5 +1,4 @@
 
-
 // import { useEffect, useState } from "react";
 // import {
 //   getProfile,
@@ -12,42 +11,52 @@
 //   const [tasks, setTasks] = useState([]);
 //   const [user, setUser] = useState(null);
 
+//   // ✅ प्रोफाइल आणि टास्क्स एकत्र फेच करा
 //   const fetchUserAndTasks = async () => {
 //     try {
 //       const profile = await getProfile();
-//       console.log("✅ PROFILE", profile); // <-- DEBUG
+//       const taskList = await getTasks(profile);
+//       console.log("✅ PROFILE:", profile);
+//       console.log("✅ TASK LIST:", taskList);
 
 //       setUser(profile);
-
-//       const data = await getTasks(profile); // ✅ profile पास केला
-//           console.log("✅ TASKS", data); // <-- DEBUG
-
-//       setTasks(data);
+//       setTasks(taskList);
 //     } catch (err) {
-//       console.error("❌ Failed to fetch user or tasks", err);
+//       console.error("❌ Error fetching user or tasks:", err);
 //     }
 //   };
 
+//   // ✅ स्टेटस अपडेट हँडलर
 //   const handleStatusChange = async (taskId, newStatus) => {
 //     try {
 //       await updateTask(taskId, { status: newStatus });
-//       fetchUserAndTasks(); // ✅ Refresh after update
+//       await fetchUserAndTasks(); // रीफ्रेश टास्क्स
 //     } catch (err) {
-//       console.error("❌ Failed to update task", err);
+//       console.error("❌ Failed to update task:", err);
+//     }
+//   };
+
+//   // ✅ टास्क assign हँडलर (Admin साठी)
+//   const handleAssign = async (taskId, userId) => {
+//     try {
+//       await assignTask(taskId, userId);
+//       await fetchUserAndTasks(); // रीफ्रेश टास्क्स
+//     } catch (err) {
+//       console.error("❌ Failed to assign task:", err);
 //     }
 //   };
 
 //   useEffect(() => {
-//     fetchUserAndTasks(); // ✅ Single call on mount
+//     fetchUserAndTasks();
 //   }, []);
+
+//   if (!user) return <p>🔄 Loading user...</p>;
 
 //   return (
 //     <div className="p-6">
 //       <h1 className="text-2xl font-bold mb-4">Tasks</h1>
 
-//       {!user ? (
-//         <p>🔄 Loading user...</p>
-//       ) : tasks.length === 0 ? (
+//       {tasks.length === 0 ? (
 //         <p>🚫 No tasks found.</p>
 //       ) : (
 //         <ul className="space-y-4">
@@ -82,31 +91,26 @@
 //                   </select>
 //                 )}
 
-//                 {/* ✅ Admin - Assign to user */}
+//                 {/* ✅ Admin: Assign Task */}
 //                 {isAdmin && (
-//                   <div className="mt-2">
-//                     <label className="block text-sm mb-1">
+//                   <div className="mt-3">
+//                     <label className="block text-sm font-medium mb-1">
 //                       Assign to User ID:
 //                     </label>
 //                     <input
 //                       type="number"
-//                       placeholder="User ID"
+//                       placeholder="Enter User ID"
 //                       onKeyDown={async (e) => {
 //                         if (e.key === "Enter") {
 //                           const userId = Number(e.target.value);
 //                           if (userId) {
-//                             try {
-//                               await assignTask(task.id, userId);
-//                               fetchUserAndTasks(); // ✅ Refresh after assign
-//                             } catch (err) {
-//                               console.error("❌ Assign task failed", err);
-//                             }
+//                             await handleAssign(task.id, userId);
 //                           }
 //                         }
 //                       }}
 //                       className="border p-1 rounded w-full"
 //                     />
-//                     <p className="text-xs text-gray-500 mt-1">
+//                     <p className="text-xs text-gray-500">
 //                       Press Enter to assign
 //                     </p>
 //                   </div>
@@ -119,7 +123,6 @@
 //     </div>
 //   );
 // }
-
 import { useEffect, useState } from "react";
 import {
   getProfile,
@@ -131,21 +134,27 @@ import {
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // ✅ User आणि Tasks एकाच वेळी fetch करा
+  // ✅ प्रोफाइल आणि टास्क्स फेच करणे
   const fetchUserAndTasks = async () => {
     try {
       const profile = await getProfile();
       const taskList = await getTasks(profile);
 
+      console.log("✅ PROFILE:", profile);
+      console.log("✅ TASK LIST:", taskList);
+
       setUser(profile);
       setTasks(taskList);
     } catch (err) {
       console.error("❌ Error fetching user or tasks:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ Status अपडेट handler
+  // ✅ Task Status Update
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       await updateTask(taskId, { status: newStatus });
@@ -155,7 +164,7 @@ export default function Tasks() {
     }
   };
 
-  // ✅ Admin असला तर task assign करण्याची सोय
+  // ✅ Admin assigns task to user
   const handleAssign = async (taskId, userId) => {
     try {
       await assignTask(taskId, userId);
@@ -169,11 +178,11 @@ export default function Tasks() {
     fetchUserAndTasks();
   }, []);
 
-  if (!user) return <p>🔄 Loading user...</p>;
+  if (loading) return <p>🔄 Loading user...</p>;
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Tasks</h1>
+      <h1 className="text-2xl font-bold mb-4">📋 Tasks</h1>
 
       {tasks.length === 0 ? (
         <p>🚫 No tasks found.</p>
@@ -192,7 +201,7 @@ export default function Tasks() {
 
                 {isAdmin && task.user?.username && (
                   <p className="text-sm italic text-gray-600">
-                    Owner: {task.user.username}
+                    👤 Owner: {task.user.username}
                   </p>
                 )}
 
@@ -210,6 +219,7 @@ export default function Tasks() {
                   </select>
                 )}
 
+                {/* ✅ Admin: Assign Task */}
                 {isAdmin && (
                   <div className="mt-3">
                     <label className="block text-sm font-medium mb-1">
@@ -228,7 +238,9 @@ export default function Tasks() {
                       }}
                       className="border p-1 rounded w-full"
                     />
-                    <p className="text-xs text-gray-500">Press Enter to assign</p>
+                    <p className="text-xs text-gray-500">
+                      Press Enter to assign
+                    </p>
                   </div>
                 )}
               </li>
