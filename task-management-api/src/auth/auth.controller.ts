@@ -76,7 +76,9 @@ export class AuthController {
     res.cookie('jwt', access_token, {
       httpOnly: true,
       sameSite: 'none',
-      secure: true,
+        secure: process.env.NODE_ENV === 'production', // 🔐 secure=true only in production
+
+     // secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
 

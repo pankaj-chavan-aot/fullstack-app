@@ -117,6 +117,8 @@ export class TasksService {
   }
 
   async findAll(user: User): Promise<Task[]> {
+      console.log("🔍 User requesting tasks:", user); // 👈 हे टाक
+
     if (user.role === UserRole.ADMIN) {
       return this.tasksRepo.find({ relations: ['user'] });
     }
