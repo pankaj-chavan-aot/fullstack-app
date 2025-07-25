@@ -271,7 +271,7 @@ export default function Tasks() {
       const profile = await getProfile();
       console.log("✅ PROFILE:", profile);
 
-      const taskList = await getTasks(); // ⬅️ profile न देता आता फक्त call करतो
+      const taskList = await getTasks(profile); // ✅ fix – profile पाठवलं
       console.log("✅ TASK LIST:", taskList);
 
       setUser(profile);
