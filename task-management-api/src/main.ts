@@ -13,7 +13,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://my-auth-app-six.vercel.app', // Official deployed frontend
-      'https://my-auth-j8ftulo1b-pankaj-chavans-projects-fc13a409.vercel.app', // Preview/test frontend
+      //'https://my-auth-j8ftulo1b-pankaj-chavans-projects-fc13a409.vercel.app', // Preview/test frontend
     ],
     credentials: true,
   });
