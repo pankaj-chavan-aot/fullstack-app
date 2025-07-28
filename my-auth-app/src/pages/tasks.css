@@ -1,4 +1,4 @@
-.tasks-container {
+/* .tasks-container {
   max-width: 700px;
   margin: 20px auto;
   padding: 0 15px;
@@ -57,4 +57,22 @@ h2 {
   font-weight: bold;
   margin-top: 40px;
   color: #e74c3c;
+} */
+/* Tasks.css */
+.task-card {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.task-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.task-meta {
+  font-size: 0.9rem;
+  color: #666;
 }

@@ -35,15 +35,14 @@
 //   }
 // };
 
-// // ✅ Get Tasks based on role (admin → all, user → own)
-// export const getTasks = async () => {
+// // ✅ FIXED: Get Tasks (now accepts profile argument)
+// export const getTasks = async (profile) => {
 //   try {
-//     const profile = await getProfile();
 //     const res = profile.role === 'admin'
-//       ? await API.get('/tasks')                     // Admin → all tasks
-//       : await API.get(`/tasks/user/${profile.id}`); // User → own tasks
+//       ? await API.get('/tasks')                // admin → all tasks
+//       : await API.get(`/tasks/user/${profile.id}`);  // user → own tasks
 
-//     console.log("✅ TASK LIST", res.data); // 🔍 Debug log
+//     console.log("✅ TASK LIST", res.data);
 //     return res.data;
 //   } catch (err) {
 //     console.error("❌ Get tasks error:", err?.response?.status, err?.response?.data);
@@ -51,7 +50,7 @@
 //   }
 // };
 
-// // ✅ Create Task (admin or user)
+// // ✅ Create Task
 // export const createTask = async (taskData) => {
 //   try {
 //     const res = await API.post('/tasks', taskData);
@@ -62,7 +61,7 @@
 //   }
 // };
 
-// // ✅ Update Task (user → own, admin → any)
+// // ✅ Update Task
 // export const updateTask = async (taskId, updates) => {
 //   try {
 //     const res = await API.patch(`/tasks/${taskId}`, updates);
@@ -73,7 +72,7 @@
 //   }
 // };
 
-// // ✅ Assign Task to user (admin only)
+// // ✅ Assign Task
 // export const assignTask = async (taskId, userId) => {
 //   try {
 //     const res = await API.patch(`/tasks/${taskId}/assign`, { userId });
@@ -84,14 +83,13 @@
 //   }
 // };
 
-
 // src/api/auth.js
-import API from './api';
+import API from "./api";
 
 // ✅ Signup
 export const signup = async (username, password, role) => {
   try {
-    const res = await API.post('/auth/signup', { username, password, role });
+    const res = await API.post("/auth/signup", { username, password, role });
     return res.data;
   } catch (err) {
     console.error("❌ Signup error:", err?.response?.status, err?.response?.data);
@@ -102,7 +100,7 @@ export const signup = async (username, password, role) => {
 // ✅ Login
 export const login = async (username, password) => {
   try {
-    const res = await API.post('/auth/login', { username, password });
+    const res = await API.post("/auth/login", { username, password });
     return res.data;
   } catch (err) {
     console.error("❌ Login error:", err?.response?.status, err?.response?.data);
@@ -110,10 +108,21 @@ export const login = async (username, password) => {
   }
 };
 
+// ✅ Logout
+export const logout = async () => {
+  try {
+    const res = await API.post("/auth/logout");
+    return res.data;
+  } catch (err) {
+    console.error("❌ Logout error:", err?.response?.status, err?.response?.data);
+    throw err;
+  }
+};
+
 // ✅ Get Profile
 export const getProfile = async () => {
   try {
-    const res = await API.post('/auth/profile');
+    const res = await API.post("/auth/profile");
     return res.data;
   } catch (err) {
     console.error("❌ Profile fetch error:", err?.response?.status, err?.response?.data);
@@ -121,14 +130,12 @@ export const getProfile = async () => {
   }
 };
 
-// ✅ FIXED: Get Tasks (now accepts profile argument)
+// ✅ Get Tasks (accept profile as argument)
 export const getTasks = async (profile) => {
   try {
-    const res = profile.role === 'admin'
-      ? await API.get('/tasks')                      // admin → all tasks
-      : await API.get(`/tasks/user/${profile.id}`);  // user → own tasks
-
-    console.log("✅ TASK LIST", res.data);
+    const res = profile.role === "admin"
+      ? await API.get("/tasks")
+      : await API.get(`/tasks/user/${profile.id}`);
     return res.data;
   } catch (err) {
     console.error("❌ Get tasks error:", err?.response?.status, err?.response?.data);
@@ -139,7 +146,7 @@ export const getTasks = async (profile) => {
 // ✅ Create Task
 export const createTask = async (taskData) => {
   try {
-    const res = await API.post('/tasks', taskData);
+    const res = await API.post("/tasks", taskData);
     return res.data;
   } catch (err) {
     console.error("❌ Create task error:", err?.response?.status, err?.response?.data);
@@ -158,7 +165,7 @@ export const updateTask = async (taskId, updates) => {
   }
 };
 
-// ✅ Assign Task
+// ✅ Assign Task (admin only)
 export const assignTask = async (taskId, userId) => {
   try {
     const res = await API.patch(`/tasks/${taskId}/assign`, { userId });
