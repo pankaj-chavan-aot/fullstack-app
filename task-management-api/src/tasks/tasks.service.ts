@@ -117,6 +117,8 @@ export class TasksService {
   }
 
   async findAll(user: User): Promise<Task[]> {
+      console.log('🧠 findAll called by:', user);
+
       console.log("🔍 User requesting tasks:", user); // 👈 हे टाक
 
     if (user.role === UserRole.ADMIN) {
