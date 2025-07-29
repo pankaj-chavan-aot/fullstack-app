@@ -24,10 +24,16 @@
 import axios from "axios";
 
 console.log("🌍 API URL:", process.env.REACT_APP_API_URL); // ✅ verify
-
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: "https://task-management-api-f496.onrender.com", // TEMP for debug
   withCredentials: true,
 });
 
+// const API = axios.create({
+//   baseURL: process.env.REACT_APP_API_URL,
+//   withCredentials: true,
+// });
+
 export default API;
+
+
