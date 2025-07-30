@@ -108,16 +108,16 @@ export const login = async (username, password) => {
   }
 };
 
-// ✅ Logout
-export const logout = async () => {
-  try {
-    const res = await API.post("/auth/logout");
-    return res.data;
-  } catch (err) {
-    console.error("❌ Logout error:", err?.response?.status, err?.response?.data);
-    throw err;
-  }
-};
+// // ✅ Logout
+// export const logout = async () => {
+//   try {
+//     const res = await API.post("/auth/logout");
+//     return res.data;
+//   } catch (err) {
+//     console.error("❌ Logout error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
 
 // ✅ Get Profile
 export const getProfile = async () => {

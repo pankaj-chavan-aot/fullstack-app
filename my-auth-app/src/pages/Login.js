@@ -102,7 +102,7 @@ export default function Login() {
     try {
       await login(username, password);
       const user = await getProfile();  // 👈 getProfile returns user object
-      alert(`Welcome, ${user.username}`);  // ✅ correctly access username
+      alert(`Welcome, ${user.data.username}`);  // ✅ correctly access username
     } catch (err) {
       if (err.response?.status === 401) {
         setError('Unauthorized: Please login correctly');
