@@ -99,23 +99,40 @@ export default function Login() {
     setLoading(true);
     setError(null);
 
+    // try {
+    //   await login(username, password);
+    //   const user = await getProfile();  // 👈 getProfile returns user object
+    //   //alert(`Welcome, ${user.data.username}`);  // ✅ correctly access username
+    //       // alert(`Welcome, ${user.username}`);  // ✅ FIXED
+    //       alert(`Welcome, ${user.username}`); // ✅ FIXED
+    //       console.log("Logged in user:", user);
+
+
+    // } catch (err) {
+    //   if (err.response?.status === 401) {
+    //     setError('Unauthorized: Please login correctly');
+    //   } else {
+    //     setError('Login failed');
+    //   }
+    // } finally {
+    //   setLoading(false);
+    // }
+
     try {
-      await login(username, password);
-      const user = await getProfile();  // 👈 getProfile returns user object
-      //alert(`Welcome, ${user.data.username}`);  // ✅ correctly access username
-          alert(`Welcome, ${user.username}`);  // ✅ FIXED
-          console.log("Logged in user:", user);
+  await login(username, password);
+  const user = await getProfile(); // returns { data: { id, username, role } }
+  console.log("✅ PROFILE:", user);
+  alert(`Welcome, ${user.data.username}`); // ✅ FIXED
+} catch (err) {
+  if (err.response?.status === 401) {
+    setError('Unauthorized: Please login correctly');
+  } else {
+    setError('Login failed');
+  }
+} finally {
+  setLoading(false);
+}
 
-
-    } catch (err) {
-      if (err.response?.status === 401) {
-        setError('Unauthorized: Please login correctly');
-      } else {
-        setError('Login failed');
-      }
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -133,6 +150,7 @@ export default function Login() {
         placeholder="Password"
         value={password}
         onChange={e => setPassword(e.target.value)}
+         autoComplete="current-password" // ✅ हे जोडा
       />
       {error && <div className="login-error">{error}</div>}
       <button className="login-button" type="submit" disabled={loading}>
