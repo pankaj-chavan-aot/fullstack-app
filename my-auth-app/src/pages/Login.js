@@ -48,7 +48,7 @@ export default function Login() {
     try {
       await login(username, password);
       const res = await getProfile();
-      alert(`Welcome, ${res.data.username}`);
+      alert(`Welcome, ${res.username}`);
     } catch (err) {
       if (err.response?.status === 401) {
         setError('Unauthorized: Please login correctly');
