@@ -120,17 +120,31 @@ export const login = async (username, password) => {
 // };
 
 // ✅ Get Profile
+
+// ✅ Get Profile
 export const getProfile = async () => {
   try {
-    const res = await API.post("/auth/profile");
-    
+    const res = await API.post("/auth/profile", null, {
+      validateStatus: (status) => status >= 200 && status < 300,
+    });
     return res.data;
-
   } catch (err) {
     console.error("❌ Profile fetch error:", err?.response?.status, err?.response?.data);
     throw err;
   }
 };
+
+// export const getProfile = async () => {
+//   try {
+//     const res = await API.post("/auth/profile");
+    
+//     return res.data;
+
+//   } catch (err) {
+//     console.error("❌ Profile fetch error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
 
 // ✅ Get Tasks (accept profile as argument)
 export const getTasks = async (profile) => {
