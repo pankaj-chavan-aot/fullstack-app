@@ -122,10 +122,10 @@ export const login = async (username, password) => {
 // ✅ Get Profile
 export const getProfile = async () => {
   try {
-    const res = await API.post("/auth/profile");
+    const res = await API.get("/auth/profile");
     //return res.data;
     return res;
-    
+
   } catch (err) {
     console.error("❌ Profile fetch error:", err?.response?.status, err?.response?.data);
     throw err;
