@@ -133,7 +133,7 @@ export const getProfile = async () => {
 // ✅ Get Tasks (accept profile as argument)
 export const getTasks = async (profile) => {
   try {
-    const res = profile.role === "admin"
+    const res = profile.role === "ADMIN"
       ? await API.get("/tasks")
       : await API.get(`/tasks/user/${profile.id}`);
     return res.data;
