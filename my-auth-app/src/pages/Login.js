@@ -118,11 +118,11 @@ export default function Login() {
     //   setLoading(false);
     // }
 
-    try {
+ try {
   await login(username, password);
-  const user = await getProfile(); // returns { data: { id, username, role } }
+  const user = await getProfile(); // returns { id, username, role }
   console.log("✅ PROFILE:", user);
-  alert(`Welcome, ${user.data.username}`); // ✅ FIXED
+  alert(`Welcome, ${user.username}`); // ✅ FIXED
 } catch (err) {
   if (err.response?.status === 401) {
     setError('Unauthorized: Please login correctly');
@@ -132,6 +132,7 @@ export default function Login() {
 } finally {
   setLoading(false);
 }
+
 
   };
 
