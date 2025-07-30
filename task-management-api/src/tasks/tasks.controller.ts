@@ -148,6 +148,7 @@ import {
   Req,
   UseGuards,
   ForbiddenException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -162,33 +163,35 @@ import { UserRole } from '../users/entities/user.entity';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  // ✅ Create Task (admin/user)
   @Post()
   @Role(UserRole.ADMIN, UserRole.USER)
   async create(@Body() dto: CreateTaskDto, @Req() req) {
-    const task = await this.tasksService.create(dto, req.user);
-    return task;
+    return this.tasksService.create(dto, req.user);
   }
 
+  // ✅ Get all tasks (Admin: all tasks, User: own tasks)
   @Get()
   @Role(UserRole.ADMIN, UserRole.USER)
   async findAll(@Req() req) {
-    const tasks = await this.tasksService.findAll(req.user);
-    return tasks;
+    console.log("👤 Logged in user:", req.user); // 🪵 Debug
+    return this.tasksService.findAll(req.user);
   }
 
-  // ✅ Add this route to fetch tasks for a specific user
+  // ✅ Get tasks for specific user (Admin only or same user)
   @Get('user/:id')
   @Role(UserRole.ADMIN, UserRole.USER)
-  async findByUser(@Param('id') userId: number, @Req() req) {
+  async findByUser(@Param('id', ParseIntPipe) userId: number, @Req() req) {
     if (req.user.role !== UserRole.ADMIN && req.user.id !== userId) {
       throw new ForbiddenException('You can only access your own tasks');
     }
     return this.tasksService.findByUser(userId);
   }
 
+  // ✅ Get one task (admin can see any, user only their own)
   @Get(':id')
   @Role(UserRole.ADMIN, UserRole.USER)
-  async findOne(@Param('id') id: number, @Req() req) {
+  async findOne(@Param('id', ParseIntPipe) id: number, @Req() req) {
     const task = await this.tasksService.findOne(id);
     if (req.user.role !== UserRole.ADMIN && task.user.id !== req.user.id) {
       throw new ForbiddenException('Access denied');
@@ -196,16 +199,21 @@ export class TasksController {
     return task;
   }
 
+  // ✅ Update task
   @Put(':id')
   @Role(UserRole.ADMIN, UserRole.USER)
-  async update(@Param('id') id: number, @Body() dto: UpdateTaskDto, @Req() req) {
-    const task = await this.tasksService.update(id, dto, req.user);
-    return task;
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateTaskDto,
+    @Req() req
+  ) {
+    return this.tasksService.update(id, dto, req.user);
   }
 
+  // ✅ Delete task
   @Delete(':id')
   @Role(UserRole.ADMIN, UserRole.USER)
-  async remove(@Param('id') id: number, @Req() req) {
+  async remove(@Param('id', ParseIntPipe) id: number, @Req() req) {
     await this.tasksService.remove(id, req.user);
     return { message: 'Task deleted successfully' };
   }
