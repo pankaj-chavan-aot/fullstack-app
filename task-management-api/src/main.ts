@@ -12,7 +12,8 @@ async function bootstrap() {
   // ✅ Enable CORS for both Vercel frontend URLs
   app.enableCors({
     origin: [
-      'https://my-auth-app-six.vercel.app', // Official deployed frontend
+      'https://my-auth-app-sooty.vercel.app'
+     // 'https://my-auth-app-six.vercel.app', // Official deployed frontend
       //'https://my-auth-j8ftulo1b-pankaj-chavans-projects-fc13a409.vercel.app', // Preview/test frontend
     ],
     credentials: true,
