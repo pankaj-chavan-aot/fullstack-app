@@ -146,10 +146,23 @@ export const getProfile = async () => {
 //   }
 // };
 
-// ✅ Get Tasks (accept profile as argument)
+// // ✅ Get Tasks (accept profile as argument)
+// export const getTasks = async (profile) => {
+//   try {
+//     const res = profile.role === "ADMIN"
+//       ? await API.get("/tasks")
+//       : await API.get(`/tasks/user/${profile.id}`);
+//     return res.data;
+//   } catch (err) {
+//     console.error("❌ Get tasks error:", err?.response?.status, err?.response?.data);
+//     throw err;
+//   }
+// };
+
 export const getTasks = async (profile) => {
   try {
-    const res = profile.role === "ADMIN"
+    const isAdmin = profile.role?.toLowerCase() === "admin"; // ✅ safe comparison
+    const res = isAdmin
       ? await API.get("/tasks")
       : await API.get(`/tasks/user/${profile.id}`);
     return res.data;
@@ -158,6 +171,7 @@ export const getTasks = async (profile) => {
     throw err;
   }
 };
+
 
 // ✅ Create Task
 export const createTask = async (taskData) => {
