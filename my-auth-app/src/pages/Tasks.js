@@ -566,7 +566,7 @@ export default function Tasks() {
       setUser(userData);
       console.log("👤 USER:", userData);
 
-      const tasksData = await getTasks();
+      const tasksData = await getTasks(userData);
       setTasks(tasksData);
       console.log("✅ TASK LIST:", tasksData);
     } catch (err) {
