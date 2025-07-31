@@ -1,12 +1,72 @@
 
 
+// // import { useState } from 'react';
+// // import { signup } from '../api/auth';
+// // import './Signup.css';  // CSS import
+
+// // export default function Signup() {
+// //   const [username, setUsername] = useState('');
+// //   const [password, setPassword] = useState('');
+// //   const [error, setError] = useState(null);
+// //   const [loading, setLoading] = useState(false);
+
+// //   const handleSignup = async (e) => {
+// //     e.preventDefault();
+// //     setLoading(true);
+// //     setError(null);
+
+// //     try {
+// //       await signup(username, password);
+// //       alert('Signup done, you can now login!');
+// //       setUsername('');
+// //       setPassword('');
+// //     } catch (err) {
+// //       console.log('Signup error:', err.response);
+// //       if (
+// //         err.response?.data?.code === '409' ||
+// //         err.response?.data?.message === 'Username already exists'
+// //       ) {
+// //         setError('Username already exists, please choose another.');
+// //       } else {
+// //         setError('Signup failed. Please try again.');
+// //         console.error(err);
+// //       }
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   return (
+// //     <form onSubmit={handleSignup} className="signup-form">
+// //       <h2 className="signup-title">Signup</h2>
+// //       <input
+// //         className="signup-input"
+// //         placeholder="Username"
+// //         value={username}
+// //         onChange={(e) => setUsername(e.target.value)}
+// //       />
+// //       <input
+// //         className="signup-input"
+// //         type="password"
+// //         placeholder="Password"
+// //         value={password}
+// //         onChange={(e) => setPassword(e.target.value)}
+// //       />
+// //       {error && <div className="signup-error">{error}</div>}
+// //       <button className="signup-button" type="submit" disabled={loading}>
+// //         {loading ? 'Signing up...' : 'Signup'}
+// //       </button>
+// //     </form>
+// //   );
+// // }
 // import { useState } from 'react';
 // import { signup } from '../api/auth';
-// import './Signup.css';  // CSS import
+// import './Signup.css';
 
 // export default function Signup() {
 //   const [username, setUsername] = useState('');
 //   const [password, setPassword] = useState('');
+//   const [role, setRole] = useState('USER');
 //   const [error, setError] = useState(null);
 //   const [loading, setLoading] = useState(false);
 
@@ -16,10 +76,11 @@
 //     setError(null);
 
 //     try {
-//       await signup(username, password);
+//       await signup(username, password, role);
 //       alert('Signup done, you can now login!');
 //       setUsername('');
 //       setPassword('');
+//       setRole('USER');
 //     } catch (err) {
 //       console.log('Signup error:', err.response);
 //       if (
@@ -52,6 +113,14 @@
 //         value={password}
 //         onChange={(e) => setPassword(e.target.value)}
 //       />
+//       <select
+//         className="signup-input"
+//         value={role}
+//         onChange={(e) => setRole(e.target.value)}
+//       >
+//         <option value="USER">User</option>
+//         <option value="ADMIN">Admin</option>
+//       </select>
 //       {error && <div className="signup-error">{error}</div>}
 //       <button className="signup-button" type="submit" disabled={loading}>
 //         {loading ? 'Signing up...' : 'Signup'}
@@ -59,6 +128,7 @@
 //     </form>
 //   );
 // }
+
 import { useState } from 'react';
 import { signup } from '../api/auth';
 import './Signup.css';
@@ -68,29 +138,30 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('USER');
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSuccess('');
 
     try {
       await signup(username, password, role);
-      alert('Signup done, you can now login!');
+      setSuccess('Signup successful! You can now login.');
       setUsername('');
       setPassword('');
       setRole('USER');
     } catch (err) {
-      console.log('Signup error:', err.response);
+      console.log('Signup error:', err?.response);
       if (
         err.response?.data?.code === '409' ||
         err.response?.data?.message === 'Username already exists'
       ) {
-        setError('Username already exists, please choose another.');
+        setError('Username already exists. Please choose another.');
       } else {
         setError('Signup failed. Please try again.');
-        console.error(err);
       }
     } finally {
       setLoading(false);
@@ -98,33 +169,43 @@ export default function Signup() {
   };
 
   return (
-    <form onSubmit={handleSignup} className="signup-form">
-      <h2 className="signup-title">Signup</h2>
-      <input
-        className="signup-input"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        className="signup-input"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <select
-        className="signup-input"
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-      >
-        <option value="USER">User</option>
-        <option value="ADMIN">Admin</option>
-      </select>
-      {error && <div className="signup-error">{error}</div>}
-      <button className="signup-button" type="submit" disabled={loading}>
-        {loading ? 'Signing up...' : 'Signup'}
-      </button>
-    </form>
+    <div className="signup-container">
+      <form onSubmit={handleSignup} className="signup-form">
+        <h2 className="signup-title">Create an Account</h2>
+
+        <input
+          className="signup-input"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+
+        <input
+          className="signup-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <select
+          className="signup-input"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+
+        {error && <div className="signup-error">{error}</div>}
+        {success && <div className="signup-success">{success}</div>}
+
+        <button className="signup-button" type="submit" disabled={loading}>
+          {loading ? 'Signing up...' : 'Signup'}
+        </button>
+      </form>
+    </div>
   );
 }
