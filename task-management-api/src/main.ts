@@ -20,7 +20,7 @@ async function bootstrap() {
   // });
 
   app.enableCors({
-  origin: 'https://my-auth-app-sooty.vercel.app', // ✅ Vercel production domain
+  origin: 'fullstack-app-mu-rosy.vercel.app', // ✅ Vercel production domain
   credentials: true,
 });
 
