@@ -8,7 +8,7 @@ async function bootstrap() {
 
   // ✅ Enable cookie parsing
   app.use(cookieParser());
-
+app
   // ✅ Enable CORS for both Vercel frontend URLs
   // app.enableCors({
   //   origin: [
@@ -20,7 +20,7 @@ async function bootstrap() {
   // });
 
   app.enableCors({
-  origin: 'fullstack-app-mu-rosy.vercel.app', // ✅ Vercel production domain
+  origin: 'fullstack-app-nine-lemon.vercel.app', // ✅ Vercel production domain
   credentials: true,
 });
 
