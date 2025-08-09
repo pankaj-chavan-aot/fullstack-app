@@ -20,7 +20,8 @@ app
   // });
 
   app.enableCors({
-  origin: 'https://fullstack-app-nine-lemon.vercel.app/', // ✅ Vercel production domain
+  origin: 'https://my-react-app1-silk.vercel.app', // ✅ Vercel production domain
+  
   credentials: true,
 });
 
